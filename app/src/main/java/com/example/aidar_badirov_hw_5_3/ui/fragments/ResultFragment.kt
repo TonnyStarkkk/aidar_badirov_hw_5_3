@@ -1,25 +1,27 @@
 package com.example.aidar_badirov_hw_5_3.ui.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.aidar_badirov_hw_5_3.MainActivity
-import com.example.aidar_badirov_hw_5_3.R
 import com.example.aidar_badirov_hw_5_3.databinding.FragmentResultBinding
+import com.example.aidar_badirov_hw_5_3.model.ResultResponse
 
-class ResultFragment: Fragment(R.layout.fragment_result) {
+class ResultFragment : Fragment() {
 
-    private lateinit var binding: FragmentResultBinding
-    lateinit var viewModel: ResultViewModel
+    private var _binding: FragmentResultBinding? = null
+    private val binding = _binding!!
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentResultBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentResultBinding.inflate(layoutInflater)
-        viewModel = (activity as MainActivity).viewModel
-
-        viewModel.resultLiveData.observe(viewLifecycleOwner) { response ->
-            binding.percentage.text = response.percentage + " %"
-            binding.result.text = response.result
-        }
+        val resultArg = arguments?.getSerializable("RESULT_ARG") as ResultResponse
+        binding.result.text = resultArg.result
+        binding.percentage.text = resultArg.percentage
     }
 }
